@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include <time.h>
 
@@ -16,7 +17,7 @@ tiny_hash(char *str)
 }
 
 unsigned long
-dj2b_hash(char *str)
+djb2_hash(char *str)
 {
   unsigned long hash = 5381;
   int c;
@@ -51,41 +52,62 @@ lose_lose_hash(char *str)
   return hash;
 }
 
+unsigned long
+java_hash(char *str)
+{
+  unsigned int hash = 7;
+  int c;
+
+  while ((c = *str++))
+    hash = hash * 31 + c;
+
+  return hash;
+}
+
 
 int
 main(int argc, char* argv[])
 {
-  char str[47];
-  unsigned long (*hash_functions[]) (char *)
-    = {tiny_hash, dj2b_hash, sdbm_hash, lose_lose_hash};
-  char *hash_function_names[]
-    = {"Tiny", "dj2b", "sdbm", "lose-lose"};
+  FILE *f;
+  char str[47], tmp[16];
 
-  if (argc != 2) {
-    puts("No arguments detected. Reading from STDIN and printing hashed values...");
-    while (fgets(str, sizeof str, stdin)) {
-      for (int i = 0; i < ELEMENTS(hash_functions); ++i)
-        printf("%s: %lu, ", hash_function_names[i], hash_functions[i](str));
-      printf("%s", str);
-    }
-    return 1;
-  }
+  struct { char *name; unsigned long (*function) (char*); } fn_pairs[] = {
+    {"tiny", tiny_hash},
+    {"djb2", djb2_hash},
+    {"sdbm", sdbm_hash},
+    {"lose-lose", lose_lose_hash},
+    {"java", java_hash}
+  };
 
-  puts("Warming up...");
-  for (int i = 0; i < ELEMENTS(hash_functions); ++i) {
-    FILE *f = fopen(argv[1], "r");
+  if (argc != 2)
+    return puts("File name needed.");
+
+  f = fopen(argv[1], "r");
+
+  puts("Warming up and writing files.");
+  for (int i = 0; i < ELEMENTS(fn_pairs); ++i) {
+    strcpy(tmp, fn_pairs[i].name);
+    strcat(tmp, "_hash.txt");
+    FILE *d = fopen(tmp, "w");
+
     while (fgets(str, sizeof str, f))
-      hash_functions[i](str);
+      fprintf(d, "%lu\n", fn_pairs[i].function(str));
+
+    fclose(d);
+    rewind(f);
   }
 
   puts("Testing...");
-  for (int i = 0; i < ELEMENTS(hash_functions); ++i) {
-    FILE *f = fopen(argv[1], "r");
+  for (int i = 0; i < ELEMENTS(fn_pairs); ++i) {
     clock_t start = clock();
+
     while (fgets(str, sizeof str, f))
-      hash_functions[i](str);
-    printf("%s: %ld\n", hash_function_names[i], clock() - start);
+      fn_pairs[i].function(str);
+
+    printf("%s: %ldms\n", fn_pairs[i].name, (clock() - start) / (CLOCKS_PER_SEC / 1000));
+    rewind(f);
   }
 
   puts("");
+  fclose(f);
 }

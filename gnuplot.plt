@@ -5,12 +5,15 @@ set pointsize 0.1
 set title "TinyHash"
 set output 'tiny_hash.png'
 plot "tiny_hash.txt"
-set title "dj2b"
-set output 'dj2b_hash.png'
-plot "dj2b_hash.txt"
+set title "djb2"
+set output 'djb2_hash.png'
+plot "djb2_hash.txt"
 set title "sdbm"
 set output 'sdbm_hash.png'
 plot "sdbm_hash.txt"
 set title "lose-lose"
 set output 'lose_lose_hash.png'
 plot "lose_lose_hash.txt"
+set title "java"
+set output 'java_hash.png'
+plot "java_hash.txt"
