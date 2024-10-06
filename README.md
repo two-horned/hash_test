@@ -1,18 +1,33 @@
 # Tiny Hash
-
 I have written my own small hash function. My aim was to
-make it easy to compute but still very difficult to trace
-the hashed value back to the the original key word. I achieved
+easy computation of hash value while making it difficult to trace
+the hashed value back to the the key word. I achieved
 this by dynamically changing the offset based on the current hash
-and input character for each step the new hash value is being computed.
+and input character, for each step the hash value is being updated.
 
-# Features
-+ Simple. Basically a one-liner.
-+ Really fast. Can be used to index a hash map.
-+ Really secure. It's difficult to find the key from a given hash value.
-+ Expandable. Implementation can be rewritten for various sizes.
+## Code
+My code was written in the programming language C.
+```c
+unsigned long
+tiny_hash(char *str)
+{
+  unsigned long hash = 0;
+  int c;
 
-# Convince yourself?
+  while ((c = *str++))
+    hash ^= (hash - c) << ((hash + c) & 63);
+
+  return hash;
+}
+```
+
+## Features
++ Simple: Basically a one-liner.
++ Fast: Can be used to index a hash map.
++ Secure: It's difficult to find the key from a given hash value.
++ Expandable: Implementation can be rewritten for various sizes.
+
+## Convince yourself?
 Run following (requires gnuplot)
 ```bash
 make build run

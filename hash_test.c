@@ -1,8 +1,6 @@
-#include <inttypes.h>
 #include <stdio.h>
 #include <time.h>
 
-#define SEED 65599
 #define ELEMENTS(a) sizeof a / sizeof a[0]
 
 unsigned long
@@ -20,25 +18,25 @@ tiny_hash(char *str)
 unsigned long
 dj2b_hash(char *str)
 {
-    unsigned long hash = 5381;
-    int c;
+  unsigned long hash = 5381;
+  int c;
 
-    while ((c = *str++))
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+  while ((c = *str++))
+      hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
-    return hash;
+  return hash;
 }
 
 unsigned long
 sdbm_hash(char *str)
 {
-    unsigned long hash = 0;
-    int c;
+  unsigned long hash = 0;
+  int c;
 
-    while ((c = *str++))
-        hash = c + (hash << 6) + (hash << 16) - hash;
+  while ((c = *str++))
+      hash = c + (hash << 6) + (hash << 16) - hash;
 
-    return hash;
+  return hash;
 }
 
 unsigned long
@@ -88,5 +86,6 @@ main(int argc, char* argv[])
       hash_functions[i](str);
     printf("%s: %ld\n", hash_function_names[i], clock() - start);
   }
+
   puts("");
 }
