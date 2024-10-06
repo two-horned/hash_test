@@ -68,8 +68,8 @@ java_hash(char *str)
 int
 main(int argc, char* argv[])
 {
-  FILE *f;
-  char str[47], tmp[16];
+  FILE *f, *d;
+  char str[256], tmp[16];
 
   struct { char *name; unsigned long (*function) (char*); } fn_pairs[] = {
     {"tiny", tiny_hash},
@@ -82,13 +82,19 @@ main(int argc, char* argv[])
   if (argc != 2)
     return puts("File name needed.");
 
-  f = fopen(argv[1], "r");
+  if(!(f = fopen(argv[1], "r")))
+    return puts("Can't read file.");
 
   puts("Warming up and writing files.");
   for (int i = 0; i < ELEMENTS(fn_pairs); ++i) {
     strcpy(tmp, fn_pairs[i].name);
     strcat(tmp, "_hash.txt");
-    FILE *d = fopen(tmp, "w");
+
+    if (!(d = fopen(tmp, "w")))
+      return puts("Can't write file.");
+
+    if(str[254])
+      return puts("Buffer is too small to read input correctly.");
 
     while (fgets(str, sizeof str, f))
       fprintf(d, "%lu\n", fn_pairs[i].function(str));
