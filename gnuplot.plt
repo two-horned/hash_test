@@ -1,5 +1,6 @@
 #!/usr/bin/gnuplot
 set terminal png size 1920,1080
+set pointsize 0.1
 
 set title "TinyHash"
 set output 'tiny_hash.png'
