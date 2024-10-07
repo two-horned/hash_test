@@ -11,6 +11,18 @@ tiny_hash(char *str)
   int c;
 
   while ((c = *str++))
+    hash ^= (hash - c) << ((hash + c) & 63);
+
+  return hash;
+}
+
+unsigned long
+tiny_hash_v2(char *str)
+{
+  unsigned long hash = 0;
+  int c;
+
+  while ((c = *str++))
     hash ^= (hash + c) << ((hash - c) & 63);
 
   return hash;
@@ -73,6 +85,7 @@ main(int argc, char* argv[])
 
   struct { char *name; unsigned long (*function) (char*); } fn_pairs[] = {
     {"tiny", tiny_hash},
+    {"tiny2", tiny_hash_v2},
     {"djb2", djb2_hash},
     {"sdbm", sdbm_hash},
     {"lose-lose", lose_lose_hash},
