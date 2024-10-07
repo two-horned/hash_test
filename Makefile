@@ -8,3 +8,6 @@ run:
 
 bench:
 	while true; do; ./hash_test words.txt; sleep 1; done
+
+clean:
+	rm ./*hash.txt ./*hash.png

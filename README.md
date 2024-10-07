@@ -1,9 +1,8 @@
 # Tiny Hash
-I have written my own small hash function. My aim was to
-easy computation of hash value while making it difficult to trace
-the hashed value back to the the key word. I achieved
-this by dynamically changing the offset based on the current hash
-and input character, for each step the hash value is being updated.
+I have written my own small hash function. My aim was easy computation
+while making it difficult to trace back the key word from a given hash.
+I achieved this by dynamically changing the offset based on the current hash
+and input character - for each step the hash value is being updated.
 
 ## Code
 My code was written in the programming language C.
