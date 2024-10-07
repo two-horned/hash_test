@@ -11,7 +11,7 @@ tiny_hash(char *str)
   int c;
 
   while ((c = *str++))
-    hash ^= (hash - c) << ((hash + c) & 63);
+    hash ^= (hash + c) << ((hash - c) & 63);
 
   return hash;
 }

@@ -12,8 +12,8 @@ set title "sdbm"
 set output 'sdbm_hash.png'
 plot "sdbm_hash.txt"
 set title "lose-lose"
-set output 'lose_lose_hash.png'
-plot "lose_lose_hash.txt"
+set output 'lose-lose_hash.png'
+plot "lose-lose_hash.txt"
 set title "java"
 set output 'java_hash.png'
 plot "java_hash.txt"
