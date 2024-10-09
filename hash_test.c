@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 
+#define MOD_FOR_TYPES(a, t) a & ((sizeof(long) << 3) - 1)
 #define ELEMENTS(a) sizeof a / sizeof a[0]
 
 unsigned long
@@ -11,7 +12,7 @@ tiny_hash(char *str)
   int c;
 
   while ((c = *str++))
-    hash ^= (hash - c) << ((hash + c) & 63);
+    hash ^= (hash - c) << MOD_FOR_TYPES((hash + c), long);
 
   return hash;
 }
@@ -23,7 +24,7 @@ tiny_hash_v2(char *str)
   int c;
 
   while ((c = *str++))
-    hash ^= (hash + c) << ((hash - c) & 63);
+    hash ^= (hash + c) << MOD_FOR_TYPES((hash - c), long);
 
   return hash;
 }
@@ -65,6 +66,18 @@ lose_lose_hash(char *str)
 }
 
 unsigned long
+fnv_1a_hash(char *str)
+{
+  unsigned long hash = 0xcbf29ce484222325;
+  int c;
+
+  while ((c = *str++))
+    hash = (hash ^ c) * 0x100000001b3;
+
+  return hash;
+}
+
+unsigned long
 java_hash(char *str)
 {
   unsigned int hash = 7;
@@ -89,7 +102,8 @@ main(int argc, char* argv[])
     {"djb2", djb2_hash},
     {"sdbm", sdbm_hash},
     {"lose-lose", lose_lose_hash},
-    {"java", java_hash}
+    {"java", java_hash},
+    {"fnv-1a_example", fnv_1a_hash}
   };
 
   if (argc != 2)

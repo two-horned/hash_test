@@ -22,3 +22,6 @@ plot "lose-lose_hash.txt"
 set title "java"
 set output 'java_hash.png'
 plot "java_hash.txt"
+set title "FNV-1a (example)"
+set output 'fnv_1a_example_hash.png'
+plot "fnv-1a_example_hash.txt"
