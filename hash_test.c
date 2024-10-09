@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#define MOD_FOR_TYPES(a, t) a & ((sizeof(long) << 3) - 1)
+#define MOD_FOR_TYPES(a, t) (a & ((sizeof(t) << 3) - 1))
 #define ELEMENTS(a) sizeof a / sizeof a[0]
 
 unsigned long
